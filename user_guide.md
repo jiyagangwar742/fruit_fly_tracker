@@ -10,9 +10,8 @@
 7. [Generating Visualizations](#generating-visualizations)
 8. [Understanding Statistical Results](#understanding-statistical-results)
 9. [Common Use Cases](#common-use-cases)
-10. [Tips and Best Practices](#tips-and-best-practices)
-11. [Frequently Asked Questions](#frequently-asked-questions)
-12. [Troubleshooting](#troubleshooting)
+10. [Frequently Asked Questions](#frequently-asked-questions)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -609,7 +608,6 @@ Expected: 50% red, 50% white
 
 ---
 
-## Tips and Best Practices
 
 ### Before Creating Experiments
 
