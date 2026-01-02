@@ -1,4 +1,3 @@
-
 # ============================================================================
 # FILE: core/genetics.py
 # Core genetics calculations: Punnett squares and phenotype ratios
@@ -174,4 +173,3 @@ class GeneticsCalculator:
             expected_counts[phenotype] = round(data["ratio"] * total_expected, 1)
         
         return expected_counts
-

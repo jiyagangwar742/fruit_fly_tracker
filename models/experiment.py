@@ -1,4 +1,3 @@
-
 # ============================================================================
 # FILE: models/experiment.py
 # Represents a complete genetics experiment

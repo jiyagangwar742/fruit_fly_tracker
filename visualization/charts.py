@@ -1,4 +1,3 @@
-
 # ============================================================================
 # FILE: visualization/charts.py
 # Generate visualizations of experiment results

@@ -86,4 +86,3 @@ class Genotype:
     
     def __repr__(self):
         return f"Genotype({self.genotype_string})"
-
