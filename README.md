@@ -74,10 +74,6 @@ fruit_fly_tracker/
 └── exports/                # Generated reports
 ```
 
-## For Developers
-
-This project is designed with modularity in mind. Core genetics logic is separated from UI, making it easy to add different interfaces (web, GUI) in the future.
-
 ## Author
 
 Jiya Gangwar
