@@ -16,5 +16,6 @@ def main():
         print(f"\nAn error occurred: {str(e)}")
         print("Please report this issue.")
 
+
 if __name__ == "__main__":
     main()

@@ -3,6 +3,7 @@
 # CLI menu system and user interaction
 # ============================================================================
 
+from reports.reports import PDFReportGenerator
 from cli.display import Display
 from models.experiment import Experiment
 from models.allele import Allele
@@ -11,6 +12,7 @@ from core.statistics import StatisticalAnalyzer
 from storage.file_storage import ExperimentStorage
 from visualization.charts import ChartGenerator
 import config
+
 
 class MenuSystem:
     """Handles CLI menu navigation and user input."""
@@ -36,7 +38,8 @@ class MenuSystem:
         print("[4] List all experiments")
         print("[5] Search experiments")
         print("[6] Generate visualizations")
-        print("[7] Delete experiment")
+        print("[7] Export to PDF")              # NEW OPTION
+        print("[8] Delete experiment")          # CHANGED from [7]
         print("[0] Exit")
         
         choice = input("\nEnter your choice: ").strip()
@@ -53,13 +56,16 @@ class MenuSystem:
             self.search_experiments()
         elif choice == "6":
             self.generate_charts()
-        elif choice == "7":
+        elif choice == "7":                     # NEW
+            self.export_to_pdf()                # NEW
+        elif choice == "8":                     # CHANGED from "7"
             self.delete_experiment()
         elif choice == "0":
             self.running = False
             print("\nGoodbye!")
         else:
             Display.error("Invalid choice. Please try again.")
+
     
     def create_experiment(self):
         """Create a new experiment."""
@@ -413,6 +419,39 @@ class MenuSystem:
                 Display.error("Invalid choice.")
         except Exception as e:
             Display.error(f"Failed to generate chart: {str(e)}")
+    
+    def export_to_pdf(self):
+        """Export experiment to PDF report."""
+        Display.header("EXPORT TO PDF")
+        
+        experiment = self._select_experiment()
+        if not experiment:
+            return
+    
+    try:
+        output_path = PDFReportGenerator.generate_report(experiment)
+        Display.success(f"PDF report saved: {output_path}")
+        
+        # Ask if user wants to open it
+        open_file = input("\nOpen PDF now? (y/n): ").strip().lower()
+        if open_file == 'y':
+            import os
+            import platform
+            
+            # Open file with default application
+            if platform.system() == 'Darwin':  # macOS
+                os.system(f'open "{output_path}"')
+            elif platform.system() == 'Windows':
+                os.startfile(output_path)
+            else:  # Linux
+                os.system(f'xdg-open "{output_path}"')
+            
+            Display.success("PDF opened.")
+    
+    except Exception as e:
+        Display.error(f"Failed to generate PDF: {str(e)}")
+        print(f"Details: {e}")
+
     
     def delete_experiment(self):
         """Delete an experiment."""

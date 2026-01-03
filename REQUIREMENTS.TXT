@@ -3,7 +3,6 @@
 # Python dependencies needed for this project
 # ============================================================================
 
-"""
 matplotlib>=3.5.0
 scipy>=1.7.0
-"""
+reportlab>=3.6.0
