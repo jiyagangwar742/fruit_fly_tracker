@@ -3,6 +3,7 @@
 # CLI menu system and user interaction
 # ============================================================================
 
+from visualization.punnett_square import PunnettSquareVisualizer
 from reports.reports import PDFReportGenerator
 from cli.display import Display
 from models.experiment import Experiment
@@ -395,31 +396,54 @@ class MenuSystem:
         if not experiment:
             return
         
-        if not experiment.is_complete():
-            Display.error("Experiment must have observations to generate charts.")
-            return
-        
-        print("\nSelect chart type:")
+        print("\nSelect visualization type:")
         print("[1] Bar chart (Expected vs Observed)")
         print("[2] Pie chart (Phenotype distribution)")
-        print("[3] Both")
+        print("[3] Punnett Square diagram")                    # NEW OPTION
+        print("[4] All charts")                                # CHANGED from [3]
         
         choice = input("\nEnter choice: ").strip()
         
         try:
-            if choice in ["1", "3"]:
+            if choice == "1":
+                if not experiment.is_complete():
+                    Display.error("Experiment must have observations for bar chart.")
+                    return
                 path = ChartGenerator.create_bar_chart(experiment)
                 Display.success(f"Bar chart saved: {path}")
             
-            if choice in ["2", "3"]:
+            elif choice == "2":
+                if not experiment.is_complete():
+                    Display.error("Experiment must have observations for pie chart.")
+                    return
                 path = ChartGenerator.create_pie_chart(experiment)
                 Display.success(f"Pie chart saved: {path}")
             
-            if choice not in ["1", "2", "3"]:
+            elif choice == "3":                                 # NEW
+                path = PunnettSquareVisualizer.create_punnett_square(experiment)
+                Display.success(f"Punnett Square saved: {path}")
+            
+            elif choice == "4":                                 # CHANGED from "3"
+                # Generate Punnett Square (always available)
+                path = PunnettSquareVisualizer.create_punnett_square(experiment)
+                Display.success(f"Punnett Square saved: {path}")
+                
+                # Generate other charts only if observations exist
+                if experiment.is_complete():
+                    path = ChartGenerator.create_bar_chart(experiment)
+                    Display.success(f"Bar chart saved: {path}")
+                    
+                    path = ChartGenerator.create_pie_chart(experiment)
+                    Display.success(f"Pie chart saved: {path}")
+                else:
+                    Display.info("Skipping bar/pie charts (no observations yet)")
+            
+            else:
                 Display.error("Invalid choice.")
+        
         except Exception as e:
             Display.error(f"Failed to generate chart: {str(e)}")
-    
+
     def export_to_pdf(self):
         """Export experiment to PDF report."""
         Display.header("EXPORT TO PDF")
@@ -471,3 +495,4 @@ class MenuSystem:
                 Display.error("Failed to delete experiment.")
         else:
             print("Deletion cancelled.")
+            

@@ -12,6 +12,8 @@ from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from datetime import datetime
 import config
 from visualization.charts import ChartGenerator
+from visualization.punnett_square import PunnettSquareVisualizer
+
 
 class PDFReportGenerator:
     """
@@ -145,7 +147,32 @@ class PDFReportGenerator:
         
         story.append(expected_table)
         story.append(Spacer(1, 0.3*inch))
+        # Punnett Square Visualization Section (INSERT THIS)
+        story.append(Paragraph("Punnett Square", heading_style))
         
+        try:
+            punnett_path = PunnettSquareVisualizer.create_punnett_square(experiment)
+            if punnett_path.exists():
+                # Scale image based on number of gametes
+                parent1_gametes = experiment.parent1.get_gametes()
+                parent2_gametes = experiment.parent2.get_gametes()
+                
+                # Adjust size based on complexity
+                if len(parent1_gametes) <= 2 and len(parent2_gametes) <= 2:
+                    img_width = 4 * inch
+                    img_height = 4 * inch
+                else:
+                    img_width = 6 * inch
+                    img_height = 6 * inch
+                
+                img = Image(str(punnett_path), width=img_width, height=img_height)
+                story.append(img)
+                story.append(Spacer(1, 0.3*inch))
+        except Exception as e:
+            error_text = Paragraph(f"Could not generate Punnett Square: {str(e)}", styles['Normal'])
+            story.append(error_text)
+            story.append(Spacer(1, 0.3*inch))
+            
         # Observations and Analysis Section (only if experiment is complete)
         if experiment.is_complete():
             story.append(Paragraph("Observed Results", heading_style))
