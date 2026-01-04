@@ -12,6 +12,10 @@ from core.genetics import GeneticsCalculator
 from core.statistics import StatisticalAnalyzer
 from storage.file_storage import ExperimentStorage
 from visualization.charts import ChartGenerator
+from visualization.advanced_charts import AdvancedChartGenerator
+from visualization.generation_tracker import GenerationTracker
+
+
 import config
 
 
@@ -264,7 +268,44 @@ class MenuSystem:
                     Display.error("Invalid selection.")
             except ValueError:
                 Display.error("Please enter a number.")
-    
+ 
+    def _select_multiple_experiments(self):
+        """Helper to select multiple experiments from list."""
+        experiments = self.storage.load_all_experiments()
+        
+        if not experiments:
+            Display.error("No experiments found.")
+            return None
+        
+        # Sort by date
+        experiments.sort(key=lambda x: x.date_created)
+        
+        print("\nAvailable experiments:")
+        for i, exp in enumerate(experiments, 1):
+            status = "✓" if exp.is_complete() else "⏳"
+            print(f"[{i}] {status} {exp.name} ({exp.experiment_id}) - {exp.date_created.strftime('%Y-%m-%d')}")
+        
+        print("\nEnter experiment numbers separated by commas (e.g., 1,2,3)")
+        selection = input("or 'all' for all experiments: ").strip().lower()
+        
+        if selection == 'all':
+            return experiments
+        
+        try:
+            indices = [int(x.strip()) for x in selection.split(',')]
+            selected = []
+            for idx in indices:
+                if 1 <= idx <= len(experiments):
+                    selected.append(experiments[idx - 1])
+                else:
+                    Display.error(f"Invalid experiment number: {idx}")
+            
+            return selected if selected else None
+        
+        except ValueError:
+            Display.error("Invalid input format.")
+            return None
+
     def _run_statistical_analysis(self, experiment):
         """Run chi-square test on experiment."""
         result = StatisticalAnalyzer.chi_square_test(
@@ -392,57 +433,240 @@ class MenuSystem:
         """Generate visualizations for an experiment."""
         Display.header("GENERATE VISUALIZATIONS")
         
-        experiment = self._select_experiment()
-        if not experiment:
-            return
-        
         print("\nSelect visualization type:")
+        print("\n--- Basic Charts ---")
         print("[1] Bar chart (Expected vs Observed)")
         print("[2] Pie chart (Phenotype distribution)")
-        print("[3] Punnett Square diagram")                    # NEW OPTION
-        print("[4] All charts")                                # CHANGED from [3]
+        print("[3] Punnett Square diagram")
+        print("[4] All basic charts")
+        
+        print("\n--- Analysis Charts ---")
+        print("[5] Deviation plot (Shows how far off expected)")
+        print("[6] Chi-square contribution (Which phenotypes affect chi²)")
+        print("[7] Scatter plot (Expected vs Observed)")
+        print("[8] Confidence intervals (With error bars)")
+        
+        print("\n--- Distribution Charts ---")
+        print("[9] Stacked bar chart")
+        print("[10] Percentage bar chart (Horizontal)")
+        print("[11] Allele frequency pie chart")
+        print("[12] Heatmap")
+        
+        print("\n--- Multi-Experiment Charts ---")
+        print("[13] Comparison table (Multiple experiments)")
+        print("[14] Multi-generation line graph")
+        print("[15] Generation comparison")
+        
+        print("\n--- Special ---")
+        print("[16] Summary dashboard (4-panel overview)")
+        print("[17] Cumulative count graph")
+        print("[18] Generate ALL charts for this experiment")
         
         choice = input("\nEnter choice: ").strip()
         
+        # For single experiment charts
+        if choice in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "16", "17", "18"]:
+            experiment = self._select_experiment()
+            if not experiment:
+                return
+        
         try:
+            # Basic charts
             if choice == "1":
                 if not experiment.is_complete():
-                    Display.error("Experiment must have observations for bar chart.")
+                    Display.error("Need observations for this chart.")
                     return
                 path = ChartGenerator.create_bar_chart(experiment)
                 Display.success(f"Bar chart saved: {path}")
             
             elif choice == "2":
                 if not experiment.is_complete():
-                    Display.error("Experiment must have observations for pie chart.")
+                    Display.error("Need observations for this chart.")
                     return
                 path = ChartGenerator.create_pie_chart(experiment)
                 Display.success(f"Pie chart saved: {path}")
             
-            elif choice == "3":                                 # NEW
+            elif choice == "3":
                 path = PunnettSquareVisualizer.create_punnett_square(experiment)
                 Display.success(f"Punnett Square saved: {path}")
             
-            elif choice == "4":                                 # CHANGED from "3"
-                # Generate Punnett Square (always available)
+            elif choice == "4":
                 path = PunnettSquareVisualizer.create_punnett_square(experiment)
                 Display.success(f"Punnett Square saved: {path}")
                 
-                # Generate other charts only if observations exist
                 if experiment.is_complete():
                     path = ChartGenerator.create_bar_chart(experiment)
                     Display.success(f"Bar chart saved: {path}")
-                    
                     path = ChartGenerator.create_pie_chart(experiment)
                     Display.success(f"Pie chart saved: {path}")
                 else:
-                    Display.info("Skipping bar/pie charts (no observations yet)")
+                    Display.info("Skipping bar/pie (no observations yet)")
+            
+            # Analysis charts
+            elif choice == "5":
+                if not experiment.is_complete():
+                    Display.error("Need observations for this chart.")
+                    return
+                path = AdvancedChartGenerator.create_deviation_plot(experiment)
+                Display.success(f"Deviation plot saved: {path}")
+            
+            elif choice == "6":
+                if not experiment.is_complete() or not experiment.chi_square_result:
+                    Display.error("Need observations and chi-square results.")
+                    return
+                path = AdvancedChartGenerator.create_chi_square_contribution_chart(experiment)
+                Display.success(f"Chi-square contribution saved: {path}")
+            
+            elif choice == "7":
+                if not experiment.is_complete():
+                    Display.error("Need observations for this chart.")
+                    return
+                path = AdvancedChartGenerator.create_expected_vs_observed_scatter(experiment)
+                Display.success(f"Scatter plot saved: {path}")
+            
+            elif choice == "8":
+                if not experiment.is_complete():
+                    Display.error("Need observations for this chart.")
+                    return
+                path = AdvancedChartGenerator.create_confidence_interval_chart(experiment)
+                Display.success(f"Confidence interval chart saved: {path}")
+            
+            # Distribution charts
+            elif choice == "9":
+                if not experiment.is_complete():
+                    Display.error("Need observations for this chart.")
+                    return
+                path = AdvancedChartGenerator.create_stacked_bar_chart(experiment)
+                Display.success(f"Stacked bar chart saved: {path}")
+            
+            elif choice == "10":
+                if not experiment.is_complete():
+                    Display.error("Need observations for this chart.")
+                    return
+                path = AdvancedChartGenerator.create_percentage_bar_chart(experiment)
+                Display.success(f"Percentage bar chart saved: {path}")
+            
+            elif choice == "11":
+                if not experiment.is_complete():
+                    Display.error("Need observations for this chart.")
+                    return
+                path = AdvancedChartGenerator.create_allele_frequency_chart(experiment)
+                Display.success(f"Allele frequency chart saved: {path}")
+            
+            elif choice == "12":
+                if not experiment.is_complete():
+                    Display.error("Need observations for this chart.")
+                    return
+                path = AdvancedChartGenerator.create_heatmap(experiment)
+                Display.success(f"Heatmap saved: {path}")
+            
+            # Multi-experiment charts
+            elif choice == "13":
+                print("\nSelect experiments to compare:")
+                experiments = self._select_multiple_experiments()
+                if not experiments:
+                    return
+                path = AdvancedChartGenerator.create_comparison_table_image(experiments)
+                Display.success(f"Comparison table saved: {path}")
+            
+            elif choice == "14":
+                print("\nSelect experiments in chronological order:")
+                experiments = self._select_multiple_experiments()
+                if not experiments:
+                    return
+                
+                # Get trait to track
+                trait = input("Enter phenotype name to track (e.g., 'Red eyes'): ").strip()
+                if not trait:
+                    Display.error("Trait name required.")
+                    return
+                
+                path = GenerationTracker.create_multi_generation_line_graph(experiments, trait)
+                Display.success(f"Multi-generation graph saved: {path}")
+            
+            elif choice == "15":
+                print("\nSelect experiments to compare:")
+                experiments = self._select_multiple_experiments()
+                if not experiments:
+                    return
+                path = GenerationTracker.create_generation_comparison(experiments)
+                Display.success(f"Generation comparison saved: {path}")
+            
+            # Special charts
+            elif choice == "16":
+                if not experiment.is_complete():
+                    Display.error("Need observations for dashboard.")
+                    return
+                path = AdvancedChartGenerator.create_summary_dashboard(experiment)
+                Display.success(f"Summary dashboard saved: {path}")
+            
+            elif choice == "17":
+                if not experiment.is_complete():
+                    Display.error("Need observations for this chart.")
+                    return
+                path = GenerationTracker.create_cumulative_count_graph(experiment)
+                Display.success(f"Cumulative count graph saved: {path}")
+            
+            elif choice == "18":
+                # Generate ALL charts for this experiment
+                Display.info("Generating all applicable charts...")
+                
+                # Always available
+                path = PunnettSquareVisualizer.create_punnett_square(experiment)
+                Display.success(f"✓ Punnett Square: {path}")
+                
+                if experiment.is_complete():
+                    # Basic charts
+                    path = ChartGenerator.create_bar_chart(experiment)
+                    Display.success(f"✓ Bar chart: {path}")
+                    
+                    path = ChartGenerator.create_pie_chart(experiment)
+                    Display.success(f"✓ Pie chart: {path}")
+                    
+                    # Analysis charts
+                    path = AdvancedChartGenerator.create_deviation_plot(experiment)
+                    Display.success(f"✓ Deviation plot: {path}")
+                    
+                    path = AdvancedChartGenerator.create_expected_vs_observed_scatter(experiment)
+                    Display.success(f"✓ Scatter plot: {path}")
+                    
+                    path = AdvancedChartGenerator.create_confidence_interval_chart(experiment)
+                    Display.success(f"✓ Confidence intervals: {path}")
+                    
+                    # Distribution charts
+                    path = AdvancedChartGenerator.create_stacked_bar_chart(experiment)
+                    Display.success(f"✓ Stacked bar: {path}")
+                    
+                    path = AdvancedChartGenerator.create_percentage_bar_chart(experiment)
+                    Display.success(f"✓ Percentage bar: {path}")
+                    
+                    path = AdvancedChartGenerator.create_allele_frequency_chart(experiment)
+                    Display.success(f"✓ Allele frequency: {path}")
+                    
+                    path = AdvancedChartGenerator.create_heatmap(experiment)
+                    Display.success(f"✓ Heatmap: {path}")
+                    
+                    path = AdvancedChartGenerator.create_summary_dashboard(experiment)
+                    Display.success(f"✓ Dashboard: {path}")
+                    
+                    path = GenerationTracker.create_cumulative_count_graph(experiment)
+                    Display.success(f"✓ Cumulative count: {path}")
+                    
+                    if experiment.chi_square_result:
+                        path = AdvancedChartGenerator.create_chi_square_contribution_chart(experiment)
+                        Display.success(f"✓ Chi-square contribution: {path}")
+                    
+                    Display.success(f"\nAll charts generated for {experiment.name}!")
+                else:
+                    Display.info("Only Punnett Square available (no observations yet)")
             
             else:
                 Display.error("Invalid choice.")
         
         except Exception as e:
             Display.error(f"Failed to generate chart: {str(e)}")
+            import traceback
+            traceback.print_exc()
 
     def export_to_pdf(self):
         """Export experiment to PDF report."""

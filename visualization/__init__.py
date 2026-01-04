@@ -7,5 +7,12 @@
 
 from .charts import ChartGenerator
 from .punnett_square import PunnettSquareVisualizer
+from .advanced_charts import AdvancedChartGenerator
+from .generation_tracker import GenerationTracker
 
-__all__ = ['ChartGenerator', 'PunnettSquareVisualizer']
+__all__ = [
+    'ChartGenerator',
+    'PunnettSquareVisualizer', 
+    'AdvancedChartGenerator',
+    'GenerationTracker'
+]
