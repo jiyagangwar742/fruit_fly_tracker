@@ -1,0 +1,77 @@
+{
+  "experiment_id": "TEST_003",
+  "name": "Test Cross - Genotype Verification",
+  "date_created": "2026-01-03T16:27:50.332659",
+  "date_modified": "2026-01-03T16:27:50.333124",
+  "parent1": {
+    "genotype_string": "Ee Ww",
+    "alleles": {
+      "trait_1": [
+        "E",
+        "e"
+      ],
+      "trait_2": [
+        "W",
+        "w"
+      ]
+    }
+  },
+  "parent2": {
+    "genotype_string": "ee ww",
+    "alleles": {
+      "trait_1": [
+        "e",
+        "e"
+      ],
+      "trait_2": [
+        "w",
+        "w"
+      ]
+    }
+  },
+  "allele_definitions": {
+    "E": {
+      "symbol": "E",
+      "description": "Red eyes",
+      "is_dominant": true
+    },
+    "e": {
+      "symbol": "e",
+      "description": "White eyes",
+      "is_dominant": false
+    },
+    "W": {
+      "symbol": "W",
+      "description": "Normal wings",
+      "is_dominant": true
+    },
+    "w": {
+      "symbol": "w",
+      "description": "Vestigial wings",
+      "is_dominant": false
+    }
+  },
+  "total_expected": 400,
+  "expected_counts": {
+    "White eyes, Normal wings": 100.0,
+    "Red eyes, Normal wings": 100.0,
+    "Red eyes, Vestigial wings": 100.0,
+    "White eyes, Vestigial wings": 100.0
+  },
+  "observed_counts": {
+    "Red eyes, Normal wings": 98,
+    "Red eyes, Vestigial wings": 103,
+    "White eyes, Normal wings": 102,
+    "White eyes, Vestigial wings": 97
+  },
+  "notes": "Testcross to verify parent genotype. Expected 1:1:1:1 ratio. Similar to CRISPR marker verification.",
+  "chi_square_result": {
+    "chi_square": 0.26,
+    "p_value": 0.967,
+    "degrees_freedom": 3,
+    "critical_value": 7.815,
+    "alpha": 0.05,
+    "passed": true,
+    "interpretation": "Your observed data matches the expected Mendelian ratios. There is no statistically significant deviation."
+  }
+}

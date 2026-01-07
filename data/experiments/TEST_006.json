@@ -1,0 +1,55 @@
+{
+  "experiment_id": "TEST_006",
+  "name": "F2 Generation - Selecting for TT",
+  "date_created": "2026-01-03T16:27:50.335069",
+  "date_modified": "2026-01-03T16:27:50.335392",
+  "parent1": {
+    "genotype_string": "Tt",
+    "alleles": {
+      "trait_1": [
+        "T",
+        "t"
+      ]
+    }
+  },
+  "parent2": {
+    "genotype_string": "Tt",
+    "alleles": {
+      "trait_1": [
+        "T",
+        "t"
+      ]
+    }
+  },
+  "allele_definitions": {
+    "T": {
+      "symbol": "T",
+      "description": "CRISPR Marker Present",
+      "is_dominant": true
+    },
+    "t": {
+      "symbol": "t",
+      "description": "No Marker",
+      "is_dominant": false
+    }
+  },
+  "total_expected": 400,
+  "expected_counts": {
+    "No Marker": 100.0,
+    "CRISPR Marker Present": 300.0
+  },
+  "observed_counts": {
+    "CRISPR Marker Present": 315,
+    "No Marker": 85
+  },
+  "notes": "F2 generation. Selected flies with markers from F1. Marker frequency increasing.",
+  "chi_square_result": {
+    "chi_square": 3.0,
+    "p_value": 0.083,
+    "degrees_freedom": 1,
+    "critical_value": 3.841,
+    "alpha": 0.05,
+    "passed": true,
+    "interpretation": "Your observed data matches the expected Mendelian ratios. There is no statistically significant deviation."
+  }
+}

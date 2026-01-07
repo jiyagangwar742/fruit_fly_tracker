@@ -1,0 +1,55 @@
+{
+  "experiment_id": "TEST_001",
+  "name": "Eye Color Inheritance - F1 Cross",
+  "date_created": "2026-01-03T16:27:50.324822",
+  "date_modified": "2026-01-03T16:27:50.329897",
+  "parent1": {
+    "genotype_string": "Ee",
+    "alleles": {
+      "trait_1": [
+        "E",
+        "e"
+      ]
+    }
+  },
+  "parent2": {
+    "genotype_string": "ee",
+    "alleles": {
+      "trait_1": [
+        "e",
+        "e"
+      ]
+    }
+  },
+  "allele_definitions": {
+    "E": {
+      "symbol": "E",
+      "description": "Red eyes",
+      "is_dominant": true
+    },
+    "e": {
+      "symbol": "e",
+      "description": "White eyes",
+      "is_dominant": false
+    }
+  },
+  "total_expected": 500,
+  "expected_counts": {
+    "White eyes": 250.0,
+    "Red eyes": 250.0
+  },
+  "observed_counts": {
+    "Red eyes": 247,
+    "White eyes": 253
+  },
+  "notes": "Test experiment for Mendelian genetics. Expected 1:1 ratio of red to white eyes.",
+  "chi_square_result": {
+    "chi_square": 0.072,
+    "p_value": 0.788,
+    "degrees_freedom": 1,
+    "critical_value": 3.841,
+    "alpha": 0.05,
+    "passed": true,
+    "interpretation": "Your observed data matches the expected Mendelian ratios. There is no statistically significant deviation."
+  }
+}

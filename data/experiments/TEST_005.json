@@ -1,0 +1,55 @@
+{
+  "experiment_id": "TEST_005",
+  "name": "F1 Generation - CRISPR Marker Breeding",
+  "date_created": "2026-01-03T16:27:50.334339",
+  "date_modified": "2026-01-03T16:27:50.334675",
+  "parent1": {
+    "genotype_string": "Tt",
+    "alleles": {
+      "trait_1": [
+        "T",
+        "t"
+      ]
+    }
+  },
+  "parent2": {
+    "genotype_string": "Tt",
+    "alleles": {
+      "trait_1": [
+        "T",
+        "t"
+      ]
+    }
+  },
+  "allele_definitions": {
+    "T": {
+      "symbol": "T",
+      "description": "CRISPR Marker Present",
+      "is_dominant": true
+    },
+    "t": {
+      "symbol": "t",
+      "description": "No Marker",
+      "is_dominant": false
+    }
+  },
+  "total_expected": 400,
+  "expected_counts": {
+    "No Marker": 100.0,
+    "CRISPR Marker Present": 300.0
+  },
+  "observed_counts": {
+    "CRISPR Marker Present": 305,
+    "No Marker": 95
+  },
+  "notes": "F1 generation. Starting to select for homozygous TT flies.",
+  "chi_square_result": {
+    "chi_square": 0.333,
+    "p_value": 0.564,
+    "degrees_freedom": 1,
+    "critical_value": 3.841,
+    "alpha": 0.05,
+    "passed": true,
+    "interpretation": "Your observed data matches the expected Mendelian ratios. There is no statistically significant deviation."
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "experiment_id": "TEST_002",
+  "name": "Dihybrid Cross - Eye Color and Wing Shape",
+  "date_created": "2026-01-03T16:27:50.331013",
+  "date_modified": "2026-01-03T16:27:50.331895",
+  "parent1": {
+    "genotype_string": "Ee Ww",
+    "alleles": {
+      "trait_1": [
+        "E",
+        "e"
+      ],
+      "trait_2": [
+        "W",
+        "w"
+      ]
+    }
+  },
+  "parent2": {
+    "genotype_string": "Ee Ww",
+    "alleles": {
+      "trait_1": [
+        "E",
+        "e"
+      ],
+      "trait_2": [
+        "W",
+        "w"
+      ]
+    }
+  },
+  "allele_definitions": {
+    "E": {
+      "symbol": "E",
+      "description": "Red eyes",
+      "is_dominant": true
+    },
+    "e": {
+      "symbol": "e",
+      "description": "White eyes",
+      "is_dominant": false
+    },
+    "W": {
+      "symbol": "W",
+      "description": "Normal wings",
+      "is_dominant": true
+    },
+    "w": {
+      "symbol": "w",
+      "description": "Vestigial wings",
+      "is_dominant": false
+    }
+  },
+  "total_expected": 640,
+  "expected_counts": {
+    "White eyes, Normal wings": 120.0,
+    "Red eyes, Normal wings": 360.0,
+    "Red eyes, Vestigial wings": 120.0,
+    "White eyes, Vestigial wings": 40.0
+  },
+  "observed_counts": {
+    "Red eyes, Normal wings": 355,
+    "Red eyes, Vestigial wings": 118,
+    "White eyes, Normal wings": 125,
+    "White eyes, Vestigial wings": 42
+  },
+  "notes": "Classic dihybrid cross. Expected 9:3:3:1 ratio. This tests independent assortment.",
+  "chi_square_result": {
+    "chi_square": 0.411,
+    "p_value": 0.938,
+    "degrees_freedom": 3,
+    "critical_value": 7.815,
+    "alpha": 0.05,
+    "passed": true,
+    "interpretation": "Your observed data matches the expected Mendelian ratios. There is no statistically significant deviation."
+  }
+}

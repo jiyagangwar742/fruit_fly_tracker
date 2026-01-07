@@ -49,12 +49,12 @@ class StatisticalAnalyzer:
         passed = chi_square < critical_value
         
         return {
-            "chi_square": round(chi_square, 3),
-            "p_value": round(p_value, 3),
-            "degrees_freedom": df,
-            "critical_value": round(critical_value, 3),
-            "alpha": alpha,
-            "passed": passed,
+            "chi_square": round(float(chi_square), 3),      # Convert to float
+            "p_value": round(float(p_value), 3),            # Convert to float
+            "degrees_freedom": int(df),                      # Convert to int
+            "critical_value": round(float(critical_value), 3),  # Convert to float
+            "alpha": float(alpha),                           # Convert to float
+            "passed": bool(passed),                          # Convert numpy.bool_ to bool
             "interpretation": StatisticalAnalyzer._interpret_result(passed)
         }
     
@@ -68,4 +68,3 @@ class StatisticalAnalyzer:
             return ("Your observed data significantly deviates from expected ratios. "
                    "This may indicate: counting error, selection bias, or different "
                    "genetic mechanism than predicted.")
-

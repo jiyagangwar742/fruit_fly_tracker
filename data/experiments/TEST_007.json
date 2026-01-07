@@ -1,0 +1,53 @@
+{
+  "experiment_id": "TEST_007",
+  "name": "F3 Generation - Confirmed TT Line",
+  "date_created": "2026-01-03T16:27:50.335729",
+  "date_modified": "2026-01-03T16:27:50.335966",
+  "parent1": {
+    "genotype_string": "TT",
+    "alleles": {
+      "trait_1": [
+        "T",
+        "T"
+      ]
+    }
+  },
+  "parent2": {
+    "genotype_string": "TT",
+    "alleles": {
+      "trait_1": [
+        "T",
+        "T"
+      ]
+    }
+  },
+  "allele_definitions": {
+    "T": {
+      "symbol": "T",
+      "description": "CRISPR Marker Present",
+      "is_dominant": true
+    },
+    "t": {
+      "symbol": "t",
+      "description": "No Marker",
+      "is_dominant": false
+    }
+  },
+  "total_expected": 400,
+  "expected_counts": {
+    "CRISPR Marker Present": 400.0
+  },
+  "observed_counts": {
+    "CRISPR Marker Present": 400
+  },
+  "notes": "F3 generation. Successfully isolated TT flies. All offspring should have marker.",
+  "chi_square_result": {
+    "chi_square": 0.0,
+    "p_value": NaN,
+    "degrees_freedom": 0,
+    "critical_value": NaN,
+    "alpha": 0.05,
+    "passed": false,
+    "interpretation": "Your observed data significantly deviates from expected ratios. This may indicate: counting error, selection bias, or different genetic mechanism than predicted."
+  }
+}

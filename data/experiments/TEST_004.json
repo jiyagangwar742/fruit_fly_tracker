@@ -1,0 +1,55 @@
+{
+  "experiment_id": "TEST_004",
+  "name": "Problematic Cross - Selection Bias Detected",
+  "date_created": "2026-01-03T16:27:50.333570",
+  "date_modified": "2026-01-03T16:27:50.333935",
+  "parent1": {
+    "genotype_string": "Ee",
+    "alleles": {
+      "trait_1": [
+        "E",
+        "e"
+      ]
+    }
+  },
+  "parent2": {
+    "genotype_string": "ee",
+    "alleles": {
+      "trait_1": [
+        "e",
+        "e"
+      ]
+    }
+  },
+  "allele_definitions": {
+    "E": {
+      "symbol": "E",
+      "description": "Red eyes",
+      "is_dominant": true
+    },
+    "e": {
+      "symbol": "e",
+      "description": "White eyes",
+      "is_dominant": false
+    }
+  },
+  "total_expected": 500,
+  "expected_counts": {
+    "White eyes": 250.0,
+    "Red eyes": 250.0
+  },
+  "observed_counts": {
+    "Red eyes": 180,
+    "White eyes": 320
+  },
+  "notes": "This experiment shows selection bias - white-eyed flies may have been easier to spot and count. Chi-square should fail.",
+  "chi_square_result": {
+    "chi_square": 39.2,
+    "p_value": 0.0,
+    "degrees_freedom": 1,
+    "critical_value": 3.841,
+    "alpha": 0.05,
+    "passed": false,
+    "interpretation": "Your observed data significantly deviates from expected ratios. This may indicate: counting error, selection bias, or different genetic mechanism than predicted."
+  }
+}
