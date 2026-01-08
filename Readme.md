@@ -1,6 +1,6 @@
 # Fruit Fly Genetics Tracker
 
-A Python tool for tracking and analyzing fruit fly genetic crosses, designed for genetics research labs.
+A Python tool built with [Claude.ai](https://claude.ai/) for tracking and analyzing fruit fly genetic crosses, designed for genetics research labs.
 
 ## Features
 
